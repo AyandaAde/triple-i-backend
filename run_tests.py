@@ -9,14 +9,7 @@ from pathlib import Path
 
 
 def run_tests(test_type="all", verbose=True, coverage=False):
-    """
-    Run the test suite with specified options.
     
-    Args:
-        test_type: Type of tests to run ("all", "unit", "integration", "performance")
-        verbose: Whether to run in verbose mode
-        coverage: Whether to generate coverage report
-    """
     # Change to project root directory
     project_root = Path(__file__).parent
     os.chdir(project_root)
