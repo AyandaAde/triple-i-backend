@@ -485,4 +485,3 @@ I added in a few things to optimise for performance.
 1. **Asynchronous Processing**: I made the openai API calls asynchronous to have each section generated asynchronously instead of haveing one large API call that generated the entire report using `asyncio.gather()`
 2. **OpenAi Model**: I changed the openai gpt model from gpt-5-nano to gpt-4o-mini and reduced the max_completion_tokens to 2000 to optimise for speed and reduced the temperature to 0.7 to optimise for coherency. 
 3. **Memory Management**: After creating a matplotlib plot and converting it to a base64 string, I closed out the figures to free up memory.
-4. **Visuals Template**: I added visuals.py to the templetes to pre generate visuals and have them populated by data that we pass in to make for quicker chart generation.
