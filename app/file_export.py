@@ -261,7 +261,7 @@ def generate_pdf_report(
     filename = f"S1_Report_{company_id}_{year}.pdf"
     buf = io.BytesIO()
     doc = SimpleDocTemplate(
-        buf, pagesize=A4, leftMargin=36, rightMargin=36, topMargin=36, bottomMargin=36
+        buf, pagesize=A4, leftMargin=36, rightMargin=36, topMargin=36, Margin=36
     )
     styles = getSampleStyleSheet()
     story = []

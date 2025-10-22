@@ -22,7 +22,7 @@ def _plot_workforce_by_gender_pie(workforce_by_gender: List[Dict[str, Any]]) -> 
     centre_circle = plt.Circle((0, 0), 0.70, fc="white")  # Donut hole
     fig.gca().add_artist(centre_circle)
 ```
-
++
 **Training Hours Bar Chart** (lines 48-60):
 ```python
 def _plot_training_hours_by_gender_bar(training_breakdown: List[Dict[str, Any]]) -> str:
