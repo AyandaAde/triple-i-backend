@@ -104,10 +104,8 @@ class TestESRSTagsAndVisuals:
                 ):
                     assert title in text_content, f"Missing chart title: {title}"
 
-    def test_esrs_s1_tags_in_pdf(
-        self, sample_kpi_data, sample_sections, sample_charts
-    ):
-    
+    def test_esrs_s1_tags_in_pdf(self, sample_kpi_data, sample_sections, sample_charts):
+
         filename, content_b64 = generate_pdf_report(
             company_id=1,
             year=2024,
@@ -151,3 +149,57 @@ class TestESRSTagsAndVisuals:
 
         # Check for KPI summary
         assert "KPI Summary" in full_text
+
+    def test_visual_elements_in_pdf(
+        self, sample_kpi_data, sample_sections, sample_charts
+    ):
+
+        filename, content_b64 = generate_pdf_report(
+            company_id=1,
+            year=2024,
+            company_name="Test Company",
+            kpi_data=sample_kpi_data,
+            charts=sample_charts,
+            executive_summary=sample_sections["executive_summary"],
+            workforce_composition_and_diversity=sample_sections[
+                "workforce_composition_and_diversity"
+            ],
+            working_conditions_and_equal_opportunity=sample_sections[
+                "working_conditions_and_equal_opportunity"
+            ],
+            training_and_development=sample_sections["training_and_development"],
+            turnover_and_retention=sample_sections["turnover_and_retention"],
+            health_and_safety=sample_sections["health_and_safety"],
+            outlook_and_next_steps=sample_sections["outlook_and_next_steps"],
+            closing=sample_sections["closing"],
+        )
+
+        pdf_content = base64.b64decode(content_b64)
+        pdf_reader = PdfReader(BytesIO(pdf_content))
+
+        text_content = ""
+        for page in pdf_reader.pages:
+            text_content += page.extract_text()
+
+        assert "KPI Visualizations" in text_content
+
+        if sample_charts.get("trend_training_hours_per_employee"):
+            assert "Trend Training Hours Per Employee" in text_content
+
+        if sample_charts:
+            chart_titles = [
+                "Workforce By Gender",
+                "Training Hours By Gender",
+                "Trend Training Hours Per Employee",
+            ]
+
+            for title in chart_titles:
+                if any(
+                    key in sample_charts
+                    for key in [
+                        "workforce_by_gender",
+                        "training_hours_by_gender",
+                        "trend_training_hours_per_employee",
+                    ]
+                ):
+                    assert title in text_content, f"Missing chart title in PDF: {title}"

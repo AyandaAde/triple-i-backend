@@ -25,7 +25,7 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    return {"message": "Hello woeld"}
+    return {"message": "Hello world"}
 
 
 app.include_router(upload.router)
