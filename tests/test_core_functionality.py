@@ -1,7 +1,6 @@
 """
-Test core functionality of the report generation system.
+Tests core functionality of the report generation system.
 
-This file contains shared fixtures and utilities for the test suite.
 """
 
 from fastapi.testclient import TestClient

@@ -133,7 +133,7 @@ SAMPLE_HISTORICAL_KPI_DATA = {
 
 
 SAMPLE_CHARTS = {
-    "workforce_by_gender": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",  # 1x1 PNG
+    "workforce_by_gender": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==", 
     "training_hours_by_gender": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
     "trend_training_hours_per_employee": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==",
 }
@@ -168,69 +168,3 @@ def sample_charts():
 @pytest.fixture
 def sample_sections():
     return SAMPLE_SECTIONS.copy()
-
-
-@pytest.fixture
-def temp_dir():
-    with tempfile.TemporaryDirectory() as tmp_dir:
-        yield tmp_dir
-
-
-@pytest.fixture
-def mock_openai_client():
-    mock_client = AsyncMock()
-    mock_response = MagicMock()
-    mock_response.choices = [MagicMock()]
-    mock_response.choices[0].message.content = "Sample generated content"
-    mock_client.chat.completions.create.return_value = mock_response
-    return mock_client
-
-
-@pytest.fixture
-def event_loop():
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-
-def create_sample_png_base64() -> str:
-    img = Image.new("RGB", (100, 100), color="white")
-    buffer = io.BytesIO()
-    img.save(buffer, format="PNG")
-    buffer.seek(0)
-    return base64.b64encode(buffer.read()).decode("utf-8")
-
-
-@pytest.fixture
-def valid_png_base64():
-    return create_sample_png_base64()
-
-
-def create_sample_docx_content() -> bytes:
-    doc = Document()
-    doc.add_heading("Test Document", 0)
-    doc.add_paragraph("This is a test document for validation.")
-
-    buffer = io.BytesIO()
-    doc.save(buffer)
-    buffer.seek(0)
-    return buffer.read()
-
-
-@pytest.fixture
-def valid_docx_content():
-    return create_sample_docx_content()
-
-
-def create_sample_pdf_content() -> bytes:
-    buffer = io.BytesIO()
-    c = canvas.Canvas(buffer)
-    c.drawString(100, 750, "Test PDF Document")
-    c.save()
-    buffer.seek(0)
-    return buffer.read()
-
-
-@pytest.fixture
-def valid_pdf_content():
-    return create_sample_pdf_content()

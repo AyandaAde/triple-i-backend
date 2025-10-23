@@ -1,9 +1,3 @@
-# Triple-I Backend - Setup and Usage Guide
-
-## Overview
-
-This FastAPI backend service generates ESRS S1 Management Reports from workforce data. It processes Excel files containing ESRS S1 data, generates KPI visualizations, creates AI-powered narrative sections, and exports professional reports in DOCX and PDF formats.
-
 ## Prerequisites
 
 - Python 3.8 or higher
@@ -22,7 +16,6 @@ cd triple-i-backend
 ### 2. Create Virtual Environment
 
 ```bash
-# Create virtual environment
 python -m venv venv
 
 # Activate virtual environment
@@ -43,10 +36,8 @@ pip install -r requirements.txt
 Create a `.env` file in the root directory:
 
 ```env
-OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_API_KEY=your_openai_api_key
 ```
-
-**Important**: Replace `your_openai_api_key_here` with your actual OpenAI API key.
 
 ### 5. Database Setup
 
@@ -59,10 +50,6 @@ The application uses SQLite database which is automatically created on first run
 ```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
-
-The API will be available at:
-- **API Documentation**: http://localhost:8000/docs
-- **Alternative Docs**: http://localhost:8000/redoc
 
 ## API Endpoints
 
@@ -189,47 +176,9 @@ Generates a comprehensive ESRS S1 Management Report with visualizations and AI-g
 
 ## Usage Examples
 
-### 1. Upload Data and Generate Report
+### Upload Data and Generate Report
 
-```python
-import requests
-import json
-
-# Step 1: Upload Excel file
-with open('workforce_data.xlsx', 'rb') as f:
-    files = {'file': f}
-    upload_response = requests.post('http://localhost:8000/upload/', files=files)
-    upload_data = upload_response.json()
-
-# Step 2: Generate report using KPI data from upload
-report_payload = {
-    "company_id": 1,
-    "year": 2024,
-    "company_name": "Your Company Name",
-    "kpi_data": upload_data["kpi_result"]
-}
-
-report_response = requests.post(
-    'http://localhost:8000/report/',
-    json=report_payload
-)
-report_data = report_response.json()
-
-# Step 3: Save generated files
-import base64
-
-# Save DOCX file
-docx_content = base64.b64decode(report_data["files"]["docx"]["base64"])
-with open("report.docx", "wb") as f:
-    f.write(docx_content)
-
-# Save PDF file
-pdf_content = base64.b64decode(report_data["files"]["pdf"]["base64"])
-with open("report.pdf", "wb") as f:
-    f.write(pdf_content)
-```
-
-### 2. Using cURL
+Using cURL
 
 ```bash
 # Upload file
@@ -253,34 +202,9 @@ curl -X POST "http://localhost:8000/report/" \
   }'
 ```
 
-## Troubleshooting
-
-### Common Issues
-
-1. **OpenAI API Key Error**
-   - Ensure your `.env` file contains a valid `OPENAI_API_KEY`
-   - Verify the API key has sufficient credits
-
-2. **Excel File Format Error**
-   - Ensure the Excel file has the correct column names
-   - Check that all required sheets are present
-   - Verify the file is saved as `.xlsx` format
-
-3. **Database Connection Issues**
-   - Ensure the application has write permissions in the directory
-   - Check that SQLite is properly installed
-
-4. **Memory Issues with Large Files**
-   - For large Excel files, consider processing in smaller batches
-   - Monitor system memory usage during processing
-
 ### Logs and Debugging
 
 The application logs processing information to the console. Key log messages include:
-- "Connected to the API." - Upload endpoint accessed
 - "Processing sheet: [sheet_name]" - Excel sheet being processed
 - "Matched '[sheet_name]' → [ModelClass]" - Data model matching
 
-## Support
-
-For technical support or questions about the API, please refer to the API documentation at http://localhost:8000/docs when the server is running.
